@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="490" viewBox="0 0 1280 490" role="img" aria-labelledby="title desc">
+  <title id="title">DSH Pocket Connect 使用流程</title>
+  <desc id="desc">电脑上的 Connect 把 DSH Pocket 最新地址写入云端映射；手机访问固定入口，云端读取映射并返回 302，浏览器随后直接连接当前隧道。</desc>
+  <defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="m1 1 6 3.5-6 3.5" fill="none" stroke="#8498b6" stroke-width="1.7"/></marker></defs>
+  <rect x="1" y="1" width="1278" height="488" rx="24" fill="#f8faff" stroke="#e1e8f3"/>
+  <g font-family="Inter, Segoe UI, Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+    <text x="42" y="48" font-size="24" font-weight="700" fill="#20344f">电脑同步最新地址，手机保留固定入口</text>
+    <text x="42" y="82" font-size="13" fill="#7d8fa8">两条独立流程：后台更新映射，访问时查询并跳转。</text>
+    <g font-size="12" font-weight="600" fill="#8193ae"><text x="45" y="114">01 · 地址更新</text><text x="45" y="305">02 · 手机访问</text></g>
+    <rect x="42" y="130" width="292" height="100" rx="16" fill="white" stroke="#deddf3"/>
+    <rect x="42" y="130" width="5" height="100" rx="2" fill="#9c8bdb"/>
+    <text x="66" y="167" font-size="20" font-weight="650" fill="#3d3b65">DSH Pocket</text><text x="66" y="199" font-size="14" fill="#7d8ba2">报告当前随机隧道 URL</text>
+    <path d="M345 180H451" stroke="#8498b6" stroke-width="2" marker-end="url(#arrow)"/><text x="398" y="163" text-anchor="middle" font-size="11" fill="#7d8fa8">本机读取</text>
+    <rect x="464" y="130" width="292" height="100" rx="16" fill="#edf4ff" stroke="#cdddf9"/>
+    <text x="488" y="167" font-size="20" font-weight="650" fill="#28589a">本地 Connect</text><text x="488" y="199" font-size="14" fill="#6985af">检查地址变化 · 定期续期</text>
+    <path d="M768 180H876" stroke="#8498b6" stroke-width="2" marker-end="url(#arrow)"/><text x="820" y="163" text-anchor="middle" font-size="11" fill="#7d8fa8">认证更新</text>
+    <rect x="890" y="130" width="348" height="100" rx="16" fill="#edf8f4" stroke="#cce6dc"/>
+    <text x="914" y="167" font-size="20" font-weight="650" fill="#29775e">Worker + KV</text><text x="914" y="199" font-size="14" fill="#6a9789">持久保存：固定 ID → 最新 URL</text>
+    <path d="M1064 235V264H610V317" fill="none" stroke="#a4b5cb" stroke-width="1.7" stroke-dasharray="5 5" marker-end="url(#arrow)"/>
+    <rect x="740" y="251" width="160" height="25" rx="12" fill="#f8faff"/><text x="820" y="268" text-anchor="middle" font-size="11" fill="#8193ae">访问时读取当前映射</text>
+    <rect x="42" y="324" width="292" height="100" rx="16" fill="white" stroke="#dce5f2"/>
+    <text x="66" y="361" font-size="20" font-weight="650" fill="#354e70">手机扫码 / 书签</text><text x="66" y="393" font-size="14" fill="#7d8ba2">一直使用自己的固定二维码</text>
+    <path d="M345 374H451" stroke="#8498b6" stroke-width="2" marker-end="url(#arrow)"/><text x="398" y="357" text-anchor="middle" font-size="11" fill="#7d8fa8">固定链接</text>
+    <rect x="464" y="324" width="292" height="100" rx="16" fill="#edf4ff" stroke="#cdddf9"/>
+    <text x="488" y="361" font-size="20" font-weight="650" fill="#28589a">云端固定入口</text><text x="488" y="393" font-size="14" fill="#6985af">/r/你的入口 ID</text>
+    <path d="M768 374H876" stroke="#8498b6" stroke-width="2" marker-end="url(#arrow)"/><text x="820" y="357" text-anchor="middle" font-size="11" fill="#7d8fa8">302 跳转</text>
+    <rect x="890" y="324" width="348" height="100" rx="16" fill="white" stroke="#deddf3"/>
+    <text x="914" y="361" font-size="20" font-weight="650" fill="#3d3b65">当前 DSH 公网地址</text><text x="914" y="393" font-size="14" fill="#7d8ba2">原有密码认证 · DSH 界面</text>
+    <text x="42" y="465" font-size="12" fill="#7d8fa8">跳转完成后，浏览器直接连接 DSH 隧道；Connect 不转发聊天内容或 WebSocket 流量。</text>
+  </g>
+</svg>

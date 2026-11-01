@@ -1,0 +1,22 @@
+{
+  "name": "dsh-pocket-connect",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A stable QR code and entry URL for changing tunnel addresses, powered by Cloudflare Workers and KV.",
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "start": "node bin/connect.mjs",
+    "init": "node bin/connect.mjs init",
+    "setup": "node bin/connect.mjs setup",
+    "sync": "node bin/connect.mjs sync",
+    "test": "node scripts/test.mjs",
+    "check": "node scripts/check.mjs",
+    "worker:dev": "wrangler dev --local --config cloudflare/wrangler.jsonc",
+    "worker:build": "wrangler deploy --dry-run --config cloudflare/wrangler.jsonc --outdir ../data/worker-build",
+    "pack:source": "node scripts/package.mjs"
+  },
+  "dependencies": { "qrcode": "1.5.4" },
+  "devDependencies": { "wrangler": "4.156.0" },
+  "license": "MIT"
+}

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DSH Pocket Connect · 固定入口</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/" aria-label="DSH Pocket Connect"><span class="brand-mark">c</span><span class="brand-word">DSH Pocket<br>Connect<span class="brand-dot">.</span></span></a>
+    <div class="side-caption">你的连接，始终在这里。</div>
+    <nav><a class="nav-item active" href="#workspace"><span class="nav-icon">↗</span> 连接工作台 <span class="nav-count" id="profile-count">1</span></a><a class="nav-item" href="#help"><span class="nav-icon">?</span> 快速上手</a></nav>
+    <div class="sidebar-bottom"><span class="live-dot"></span> 本机管理面板 <span id="version">v1.0</span><p>隧道继续使用随机地址<br>入口由你自己管理</p></div>
+  </aside>
+  <main id="workspace">
+    <header class="topbar"><div><span class="breadcrumb">工作空间</span><span class="slash">/</span><strong>固定入口</strong></div><span class="local-badge"><span class="live-dot"></span> 仅本机可配置</span></header>
+    <section class="hero"><div class="eyebrow">ONE LINK. ALWAYS CONNECTED.</div><h1>随机地址，<span>固定入口。</span></h1><p>为不断变化的公网地址，保留一个始终能找到它的链接。</p></section>
+    <div id="banner" class="banner hidden" role="status"></div>
+    <div class="steps"><div><b>01</b><span>连接 Cloudflare</span><small>一次部署</small></div><i></i><div><b>02</b><span>配置地址来源</span><small>自动跟随</small></div><i></i><div><b>03</b><span>收藏固定入口</span><small>持续使用</small></div></div>
+    <div class="workspace-grid">
+      <div class="setup-column">
+        <section class="card cloud-card">
+          <div class="card-heading"><div class="section-icon orange">☁</div><div><h2>连接你的 Cloudflare</h2><p>使用免费的 Workers 与 KV 额度，无需购买域名。</p></div><span class="badge" id="cloud-status">未连接</span></div>
+          <div class="field"><label for="worker-name">入口服务名称</label><div class="input-addon"><input id="worker-name" placeholder="connect-xxxxxx" autocomplete="off" spellcheck="false"><span>.workers.dev</span></div><small>完整地址会在部署后生成。保留服务名称和账号子域，入口就保持固定。</small></div>
+          <div class="button-row"><button id="cloud-login" class="button secondary">登录 Cloudflare <span>↗</span></button><button id="deploy" class="button primary">一键部署入口 <span>→</span></button></div>
+          <div class="operation hidden" id="operation"><span class="spinner"></span><span id="operation-text"></span></div>
+          <details><summary>已有服务 / 高级配置</summary><div class="detail-content">
+            <div class="field"><label for="gateway-url">已有 Worker 地址</label><input id="gateway-url" type="url" placeholder="https://connect-xxxxxx.your-account.workers.dev"></div>
+            <div class="field"><label for="update-token">已有服务的更新密钥</label><input id="update-token" type="password" placeholder="留空保留当前密钥" autocomplete="new-password"><small>仅连接已有服务时需要填写；一键部署会自动配置。</small></div>
+            <div class="field"><label for="account-id">Account ID（多账户时填写）</label><input id="account-id" autocomplete="off" placeholder="32 位账户 ID"></div>
+            <div class="field"><label for="namespace-id">已有 KV Namespace ID（可选）</label><input id="namespace-id" autocomplete="off" placeholder="首次部署自动创建"></div>
+            <label class="check-label"><input id="auto-start" type="checkbox">下次打开本机面板时，自动开始同步</label>
+            <div class="save-row"><button id="save-gateway" class="button secondary small">保存服务配置</button><output id="gateway-save-status" class="save-status hidden" aria-live="polite"></output></div>
+          </div></details>
+        </section>
+        <section class="card source-card">
+          <div class="card-heading"><div class="section-icon blue">⌁</div><div><h2>配置地址来源</h2><p>选择从哪里获取最新的公网 URL。</p></div><select id="profile-select" class="compact-select" aria-label="选择入口"></select></div>
+          <div class="two-fields"><div class="field"><label for="profile-name">入口名称</label><input id="profile-name" placeholder="例如：DSH Pocket"></div><div class="field"><label for="source-type">地址来源</label><select id="source-type"><option value="dsh-pocket">DSH Pocket · 自动读取</option><option value="json">通用 JSON 接口</option><option value="file">日志 / 文本文件</option><option value="manual">手动 URL</option></select></div></div>
+          <div id="source-dsh-pocket" class="source-fields">
+            <div class="field"><label for="dsh-base">DSH Pocket 本机代理地址</label><input id="dsh-base" type="url" value="http://127.0.0.1:3081"><small>使用插件代理端口，默认 3081；DSH 主服务端口通常是 3080。</small></div>
+            <div class="field"><label for="dsh-home">DSH 数据目录 <span class="optional">可选</span></label><input id="dsh-home" placeholder="自动使用 DSH_HOME 或用户目录下的 .dsh"><small>通过现有本机认证读取状态；不会修改原插件。</small></div>
+          </div>
+          <div id="source-json" class="source-fields hidden"><div class="field"><label for="json-endpoint">JSON 接口地址</label><input id="json-endpoint" type="url" placeholder="http://127.0.0.1:4040/api/tunnels"></div><div class="field"><label for="json-path">URL 所在字段</label><input id="json-path" placeholder="tunnels.0.public_url"><small>支持嵌套字段和数组，例如 tunnels.0.public_url 或 data.url。</small></div></div>
+          <div id="source-file" class="source-fields hidden"><div class="field"><label for="log-file">日志或文本文件的完整路径</label><input id="log-file" placeholder="C:\path\to\tunnel.log"></div><div class="field"><label for="log-pattern">地址匹配规则 <span class="optional">可选</span></label><input id="log-pattern" placeholder="默认匹配最后一个 https://xxx.trycloudflare.com"><small>读取文件末尾 256 KB，使用最后一个匹配。其他隧道可填写正则表达式，第一个捕获组作为 URL。</small></div></div>
+          <div id="source-manual" class="source-fields hidden"><div class="field"><label for="manual-url">当前公网 URL</label><input id="manual-url" type="url" placeholder="https://your-tunnel.example.com"><small>URL 变化后，在这里更新并保存。也可以用命令行 push 自动提交。</small></div></div>
+          <details><summary>同步参数</summary><div class="detail-content two-fields"><div class="field"><label for="poll">检查间隔 / 秒</label><input id="poll" type="number" min="3" max="300" value="10"></div><div class="field"><label for="heartbeat">续期周期 / 秒</label><input id="heartbeat" type="number" min="60" max="3600" value="900"></div><div class="field"><label for="lease">失联有效期 / 秒</label><input id="lease" type="number" min="120" max="86400" value="1800"></div><div class="field"><label for="grace">离线宽限 / 秒</label><input id="grace" type="number" min="0" max="300" value="30"></div><p class="wide subtle">默认每个持续在线入口约 96 次 KV 续期写入 / 天，外加地址变化的更新。正常停止会标记离线；异常退出最多保留到有效期结束。</p></div></details>
+          <output id="source-result" class="source-result hidden"></output>
+          <div class="button-row source-actions"><button id="test-source" class="button secondary">测试读取</button><button id="save-profile" class="button primary">保存来源 <span>✓</span></button></div>
+        </section>
+      </div>
+      <div class="entry-column">
+        <section class="card entry-card">
+          <div class="entry-top"><span class="eyebrow">YOUR PERMANENT ENTRY</span><span class="badge" id="entry-status">等待配置</span></div>
+          <h2 id="entry-title">你的固定入口</h2><p class="entry-subtitle">每个新入口独立生成，保存后持续使用。</p>
+          <div class="qr-shell" id="qr-shell"><div id="qr-empty"><span class="qr-placeholder">⌗</span><p id="qr-empty-note">部署后生成固定二维码</p></div><img id="qr-image" class="hidden" alt="当前入口的固定二维码" width="224" height="224"></div>
+          <div class="entry-link" id="entry-link">完成部署后显示入口链接</div>
+          <div class="button-row entry-buttons"><button id="copy-link" class="button secondary small" disabled>复制链接</button><button id="download-qr" class="button secondary small" disabled>保存二维码</button></div>
+          <div class="sync-info"><span class="live-dot muted" id="sync-dot"></span><div><strong id="sync-title">等待启动同步</strong><p id="sync-note">先完成左侧配置，再开启地址同步。</p></div></div>
+          <button id="toggle-sync" class="button primary full" disabled>开始同步 <span>→</span></button>
+          <p class="entry-hint">请收藏上面的固定入口。跳转后浏览器显示的随机地址仍会变化。</p>
+        </section>
+        <section class="help-card" id="help"><span class="eyebrow">HOW IT WORKS</span><h3>固定的是入口，<br>变化的是目的地。</h3><div class="flow"><span>手机 / 书签</span><b>↓</b><span>固定 Worker 地址</span><b>↓</b><span>最新公网隧道</span></div><p>电脑保持开启，DSH 公网访问和 Connect 同步保持运行。原有 DSH 密码验证继续生效。</p><p>KV 更新可能需要约 60 秒或更久传播；302 跳转已禁用浏览器缓存。</p></section>
+      </div>
+    </div>
+    <section class="card activity-card"><div class="activity-heading"><h2>活动记录</h2><span id="activity-state">准备就绪</span></div><div class="log-list" id="logs"><div class="empty-log">配置完成后，这里会显示同步与部署状态。</div></div></section>
+    <footer><span>DSH POCKET CONNECT <span class="subtle">/</span> 保留入口，让连接更简单。</span><button id="shutdown" class="text-button">退出 Connect</button></footer>
+  </main>
+</body>
+</html>

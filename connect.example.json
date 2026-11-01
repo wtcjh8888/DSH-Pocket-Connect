@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "gateway": {
+    "workerName": "dsh-pocket-connect-example",
+    "accountId": "",
+    "namespaceId": "",
+    "url": "",
+    "updateToken": ""
+  },
+  "autoStart": false,
+  "profiles": [
+    {
+      "id": "",
+      "name": "DSH Pocket",
+      "intervalSeconds": 10,
+      "heartbeatSeconds": 900,
+      "leaseSeconds": 1800,
+      "offlineGraceSeconds": 30,
+      "source": {
+        "type": "dsh-pocket",
+        "baseUrl": "http://127.0.0.1:3081",
+        "homeDir": ""
+      }
+    }
+  ]
+}
