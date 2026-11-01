@@ -4,7 +4,7 @@ import { deflateRawSync } from 'node:zlib';
 import { ROOT } from '../lib/config.mjs';
 
 // Explicit allow list: credentials, local state, dependencies and logs are never read.
-const items = ['bin', 'cloudflare', 'lib', 'ui', 'scripts', 'test', 'docs', '.github', 'README.md', 'LICENSE', 'SECURITY.md', 'CONTRIBUTING.md', '.gitignore', '.gitattributes', '.npmrc', 'package.json', 'package-lock.json', 'connect.example.json', 'connect.cmd', 'quick-start.cmd', 'start.sh'];
+const items = ['bin', 'cloudflare', 'lib', 'ui', 'scripts', 'test', 'docs', '.github', 'README.md', 'LICENSE', 'SECURITY.md', 'CONTRIBUTING.md', '.gitignore', '.gitattributes', '.npmrc', 'package.json', 'package-lock.json', 'connect.example.json', 'connect.cmd', 'quick-start.cmd', 'quick-start.vbs', 'start.sh'];
 const entries = [];
 async function collect(relative) {
   if (relative.split('/').some(part => ['data', 'node_modules', '.wrangler', 'dist', '.git'].includes(part) || part.startsWith('.env') || part.startsWith('.dev.vars') || /\.log(?:\.|$)/i.test(part))) return;
@@ -17,6 +17,7 @@ async function collect(relative) {
 }
 for (const item of items) await collect(item);
 entries.push({ name: 'DSH-Pocket-Connect/快速开始.cmd', data: await readFile(join(ROOT, 'quick-start.cmd')) });
+entries.push({ name: 'DSH-Pocket-Connect/快速开始.vbs', data: await readFile(join(ROOT, 'quick-start.vbs')) });
 const crcTable = Array.from({ length: 256 }, (_, n) => {
   let value = n;
   for (let bit = 0; bit < 8; bit++) value = (value & 1) ? 0xedb88320 ^ (value >>> 1) : value >>> 1;

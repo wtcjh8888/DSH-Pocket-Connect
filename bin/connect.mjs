@@ -78,7 +78,7 @@ async function ui() {
   }
   if (!app) throw new Error('本机面板端口被占用，请使用 --port 其他端口');
   log(`本机面板已启动：http://127.0.0.1:${app.server.address().port}`);
-  log('保持此窗口运行即可自动同步；再次双击快速开始会打开同一个面板。');
+  log('Connect 正在运行；再次双击快速开始会打开同一个面板，退出请使用面板底部的“退出 Connect”。');
   if (!args.includes('--no-open')) await showPanel(app.url);
   let stopping = false;
   const stop = async () => { if (stopping) return; stopping = true; log('正在停止同步……'); await app.close(); };
