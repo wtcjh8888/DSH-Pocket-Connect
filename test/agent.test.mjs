@@ -37,6 +37,27 @@ test('a failed upload is retried, including when the source URL stays unchanged'
   await agent.tick(); assert.equal(attempts, 2);
 });
 
+test('failed offline markers are retried at most once per minute', async () => {
+  const profile = newProfile();
+  let now = 100000, available = true, attempts = 0;
+  const agent = new SyncAgent(profile, {}, { now: () => now, source: { async read() { if (!available) throw new Error('down'); return { url: 'https://first.trycloudflare.com/' }; } }, publisher: { async publish() { attempts++; if (attempts > 1) throw new Error('unreachable'); } } });
+  await agent.tick();
+  available = false;
+  now += 30001; await agent.tick();
+  now += 45000; await assert.rejects(agent.tick(), /unreachable/);
+  now += 10000; await agent.tick();
+  now += 50000; await assert.rejects(agent.tick(), /unreachable/);
+  assert.equal(attempts, 3);
+});
+
+test('error messages distinguish reading the tunnel and publishing to the entry', () => {
+  const agent = new SyncAgent(newProfile(), {});
+  assert.equal(agent.friendlyError({ name: 'TimeoutError' }), '读取地址超时，正在重试');
+  assert.equal(agent.friendlyError({ name: 'TimeoutError' }, { subject: '发布到固定入口' }), '发布到固定入口超时，正在重试');
+  assert.equal(agent.friendlyError({ code: 'ECONNREFUSED' }), '等待本机服务启动；请检查代理端口');
+  assert.equal(agent.friendlyError({ code: 'ECONNREFUSED' }, { unavailable: '无法连接固定入口' }), '无法连接固定入口');
+});
+
 test('publisher sends only selected fields, not DSH access passwords or the full status', async () => {
   const profile = newProfile();
   let sent;

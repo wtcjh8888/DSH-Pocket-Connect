@@ -16,6 +16,19 @@
 
 DSH 重启后工具会重新握手；若插件升级改变了协议，请更新适配代码或先改用 JSON / 日志 / 手动来源。DSH Desktop 的 advanced 模式不适合手机网页访问，应按原插件说明使用兼容模式。
 
+## 读取地址超时，长期不恢复
+
+先用 `.\connect.cmd test` 区分：如果命令行测试能读取到地址，而面板仍反复提示超时（面板会注明“读取地址”还是“发布到固定入口”），问题通常在电脑到 Cloudflare 入口服务的网络。部分网络会把 `workers.dev` 后缀解析到无法连接的假地址，Node 直连会一直超时。
+
+Windows 下双击“快速开始”会自动检测系统代理：仅当系统代理已开启且其端口正在监听时，Connect 的云端请求才走该本机代理，读取本机 DSH 地址始终直连。代理关闭时不注入，保持直连。手动运行时也可以先在本会话设置环境变量：
+
+```powershell
+$env:NODE_USE_ENV_PROXY = '1'; $env:HTTP_PROXY = $env:HTTPS_PROXY = 'http://127.0.0.1:7897'; $env:NO_PROXY = '127.0.0.1,localhost,::1'
+node bin/connect.mjs sync
+```
+
+环境代理需要 Node.js 24 或更新版本。macOS / Linux 按相同含义设置 `http_proxy`、`https_proxy`、`no_proxy`。若系统代理仅以 PAC 脚本配置，自动检测不会注入。
+
 ## 已同步，但手机还跳到旧地址
 
 先确认保存的是 Connect 的 `/r/入口ID` 固定链接，而不是跳转后的随机隧道地址。KV 的异地读取可能需要约 60 秒或更久传播，稍后重新打开固定入口。浏览器 302 缓存已禁用，但这不能清空 KV 的内部边缘缓存。

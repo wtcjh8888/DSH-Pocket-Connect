@@ -17,6 +17,14 @@ try {
         $connectInstall = Start-Process -FilePath $env:ComSpec -ArgumentList $connectInstallArgs -WorkingDirectory $connectRoot -WindowStyle Hidden -Wait -PassThru -RedirectStandardOutput (Join-Path $connectData 'install.log') -RedirectStandardError (Join-Path $connectData 'install-error.log')
         if ($connectInstall.ExitCode -ne 0) { throw "Dependency installation failed. Check your network and data/install-error.log, then try again." }
     }
+    # Route Node's outbound traffic through the Windows system proxy only while
+    # it is actually listening; local DSH requests stay direct via NO_PROXY.
+    foreach ($connectLine in & (Join-Path $PSScriptRoot 'proxy-env.ps1')) {
+        $connectSplit = $connectLine.IndexOf('=')
+        if ($connectSplit -gt 0) {
+            Set-Item -LiteralPath ("env:" + $connectLine.Substring(0, $connectSplit)) -Value $connectLine.Substring($connectSplit + 1)
+        }
+    }
     $connectArgs = '"' + (Join-Path $connectRoot 'bin/connect.mjs') + '" ui'
     if (-not $OpenPanel) { $connectArgs += ' --no-open' }
     # Unique logs also allow reopening an existing panel without locking its server log.
